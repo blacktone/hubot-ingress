@@ -61,7 +61,7 @@ module.exports = (robot) ->
 			msg.send error
 			@robot.logger.info error
 
-	robot.respond /vote\s+([a-f\d]{5})\s+(\d)/i, (ms) ->
+	robot.respond /vote\s+([a-f\d]{5})\s+(\d)/i, (msg) ->
 		msg.reply "Thanks for your vote"
 		
 	robot.respond /poll ping/i, (msg) ->
