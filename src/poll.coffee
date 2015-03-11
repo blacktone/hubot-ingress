@@ -50,9 +50,29 @@ module.exports = (robot) ->
 		@robot.logger.info "Topic: #{topic}"
 		options = msg.match[2]
 		@robot.logger.info "options: #{options}"
-		@robot.logger.info createPoll
-		response = createPoll topic, options
-		msg.send "@channel: #{response}"
+		# @robot.logger.info createPoll
+		# response = createPoll topic, options
+		@robot.logger.info "Creating poll with #{topic}"
+		id = generateId()
+		pollOptions = parseOptions options
+		@robot.logger.info "We have #{pollOptions.length()} options"
+		@robot.brain.data.poll[id].topic = topic
+		optionsString = ""
+
+		for pollOption in pollOptions
+			index = pollOptions.indexOf(pollOption)
+			robot.brain.data.poll[id].option[index].text
+			optionsString += "\t#{index}: #{pollOption}\n"
+		@robot.brain.save()
+		@robot.logger.info "Brain saved"
+
+		text =  """
+				POLL ID: #{id}
+				Topic: #{topic}
+				Options:
+				#{optionsString}
+				"""
+		msg.send "@channel: #{text}"
 
 	robot.respond /poll ping/i, (msg) ->
 		@robot.logger.info "ping called"
