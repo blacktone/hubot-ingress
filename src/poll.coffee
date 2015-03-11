@@ -23,8 +23,10 @@ parseOptions = (optionsString) ->
     return (optionsString.split "option: ")[1..]
 
 createPoll = (robot, topic, options...) ->
+    @robot.logger.info "Creating poll with #{topic}"
     id = generateId
     pollOptions = parseOptions options
+    @robot.logger.info "We have #{pollOptions.length()} options"
     robot.brain.data.poll[id].topic = topic
     optionsString = ""
 
@@ -33,6 +35,7 @@ createPoll = (robot, topic, options...) ->
         robot.brain.data.poll[id].option[index].text
         optionsString += "\t#{index}: #{pollOption}\n"
     robot.brain.save()
+    @robot.logg.info "Brain saved"
 
     text =  """
             POLL ID: #{id}
@@ -40,6 +43,7 @@ createPoll = (robot, topic, options...) ->
             Options:
             #{optionsString}
             """
+    return text
     
 
 module.exports = (robot) ->
