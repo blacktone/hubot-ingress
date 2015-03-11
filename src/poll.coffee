@@ -22,9 +22,9 @@ module.exports = (robot) ->
     parseOptions = (optionsString) ->
         (optionsString.split "option: ")[1..]
 
-    createPoll = (robot, topic, options) ->
+    createPoll = (topic, options) ->
         @robot.logger.info "Creating poll with #{topic}"
-        id = generateId
+        id = generateId()
         pollOptions = parseOptions options
         @robot.logger.info "We have #{pollOptions.length()} options"
         @robot.brain.data.poll[id].topic = topic
@@ -50,7 +50,7 @@ module.exports = (robot) ->
         @robot.logger.info "Topic: #{topic}"
         options = msg.match[2]
         @robot.logger.info "options: #{options}"
-        response = createPoll @robot, topic, options
+        response = createPoll topic, options
         msg.send "@channel: #{response}"
 
     robot.respond /poll ping/i, (msg) ->
