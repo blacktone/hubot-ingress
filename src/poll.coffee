@@ -15,9 +15,7 @@
 class Option
 	constructor: () ->
 class Poll
-	options
 	constructor: (@id) ->
-		options = {}
 
 module.exports = (robot) ->
 	robot.respond /start poll (.*?)\s(option:\s?.*)+/i, (msg) ->
