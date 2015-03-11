@@ -53,9 +53,10 @@ module.exports = (robot) ->
 			msg.send error
 			@robot.logger.info error
 
-	robot.respond /vote\s+(\d)/i, (msg) ->
+	robot.respond /vote\s+(\d)/i, (msg) ->		
 		vote = msg.match[1]
 		user = msg.user
+		@robot.logger.info "Adding a vote for #{vote} for #{user}"
 		#check if the user already voted
 		for option in @robot.brain.data.poll.options
 			if option.users != undefined
@@ -65,9 +66,12 @@ module.exports = (robot) ->
 		else
 			@robot.brain.data.poll.options[vote].users = []
 			@robot.brain.data.poll.options[vote].users.push(user)
+		@robot.brain.save()
+		@robot.logger.info "Brain saved"
 		msg.reply "Thanks for your vote"
 
 	robot.respond /view results/i, (msg) ->
+		@robot.logger.info "View results"
 		topic = @robot.brain.data.poll.topic
 		options = @robot.brain.data.poll.options
 		optionString = ""
@@ -76,7 +80,8 @@ module.exports = (robot) ->
 			text = option.text
 			numVotes = if option.users == undefined then 0 else option.users.length
 			users = option.users
-			optionString += "#{index}: #{text} Total: #{numVotes} Users:(#{users.join(", ")})"
+			@robot.logger.info "option: #{option} :: text: #{text} :: count: #{numVotes}"
+			optionString += "\t#{index}: #{text} Total: #{numVotes} Users:(#{users.join(", ")})\n"
 		msg.send """
 		#{topic}
 		Current Poll Results:
