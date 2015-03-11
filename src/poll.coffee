@@ -31,16 +31,21 @@ module.exports = (robot) ->
 			id = ""
 			possibleValues = "0123456789abcdef"
 			id += possibleValues.charAt(Math.floor(Math.random() * possibleValues.length)) for [1..5]
-			pollOptions = (options.split "option: ")[1..]
-			@robot.logger.info "We have #{pollOptions.length} options"
+			@robot.logger.info "Poll ID: #{id}"
+
+			pollOptions = (options.split "option: ")[1..]			
 			@robot.brain.data.poll = {}
 			@robot.brain.data.poll[id] = new Poll(id)
+			@robot.logger.info "Poll init complete"
 			@robot.brain.data.poll[id].topic = topic
+			@robot.logger.info "Poll added topic"
 			optionsString = ""
 
+			@robot.brain.data.poll[id].options = {}
 			for pollOption in pollOptions
 				index = pollOptions.indexOf(pollOption)
-				robot.brain.data.poll[id].options[index].text = pollOption
+				@robot.brain.data.poll[id].options[index] = new Option()
+				@robot.brain.data.poll[id].options[index].text = pollOption
 				optionsString += "\t#{index}: #{pollOption}\n"
 			@robot.brain.save()
 			@robot.logger.info "Brain saved"
