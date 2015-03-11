@@ -66,7 +66,23 @@ module.exports = (robot) ->
 			@robot.brain.data.poll.options[vote].users = []
 			@robot.brain.data.poll.options[vote].users.push(user)
 		msg.reply "Thanks for your vote"
-		
+
+	robot.respond /view results/i, (msg) ->
+		topic = @robot.brain.data.poll.topic
+		options = @robot.brain.data.poll.options
+		optionString = ""
+		for option in options
+			index = options.indexOf(option)
+			text = option.text
+			numVotes = if option.users == undefined then 0 else option.users.length
+			users = option.users
+			optionString += "#{index}: #{text} Total: #{numVotes} Users:(#{users.join(", ")})"
+		msg.send """
+		#{topic}
+		Current Poll Results:
+		#{optionString}
+		"""
+
 	robot.respond /poll ping/i, (msg) ->
 		@robot.logger.info "ping called"
 		msg.reply "poll pong"
