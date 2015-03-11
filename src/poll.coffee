@@ -59,11 +59,15 @@ module.exports = (robot) ->
 		@robot.logger.info "Adding a vote for #{vote} for #{user}"
 		#check if the user already voted
 		for option in @robot.brain.data.poll.options
+			@robot.logger.info "Checking #{option}"
 			if option.users != undefined
+				@robot.logger.info "Some have voted for this one"
 				option.users = option.users.filter (currentUser) -> currentUser isnt user
 		if @robot.brain.data.poll.options[vote].users != undefined
+			@robot.logger.info "add user to this option since it's defined"
 			@robot.brain.data.poll.options[vote].users.push(user)
 		else
+			@robot.logger.info "First vote, create new array"
 			@robot.brain.data.poll.options[vote].users = []
 			@robot.brain.data.poll.options[vote].users.push(user)
 		@robot.brain.save()
@@ -72,8 +76,10 @@ module.exports = (robot) ->
 
 	robot.respond /view results/i, (msg) ->
 		@robot.logger.info "View results"
-		topic = @robot.brain.data.poll.topic
+		topic = @robot.brain.data.poll.topic		
+		@robot.logger.info "#{@robot.brain.data.poll.options}"	
 		options = @robot.brain.data.poll.options
+		@robot.logger.info "#{options}"	
 		optionString = ""
 		for option in options
 			index = options.indexOf(option)
