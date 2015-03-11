@@ -35,7 +35,7 @@ createPoll = (robot, topic, options...) ->
         robot.brain.data.poll[id].option[index].text
         optionsString += "\t#{index}: #{pollOption}\n"
     robot.brain.save()
-    @robot.logg.info "Brain saved"
+    @robot.logger.info "Brain saved"
 
     text =  """
             POLL ID: #{id}
@@ -48,12 +48,14 @@ createPoll = (robot, topic, options...) ->
 
 module.exports = (robot) ->
     robot.respond /start poll (.*?)\s(option:\s?.*)+/i, (msg) ->
+        @robot.logger.info "Create poll called"
         topic = msg.match[1]
         options = msg.match[2]
         response = createPoll robot, topic, options
         msg.send "@channel: #{response}"
 
     robot.respond /poll ping/i, (msg) ->
+        @robot.logger.info "ping called"
         msg.reply "poll pong"
 
 
