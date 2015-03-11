@@ -57,7 +57,7 @@ module.exports = (robot) ->
 			possibleValues = "0123456789abcdef"
 			id += possibleValues.charAt(Math.floor(Math.random() * possibleValues.length)) for [1..5]
 			pollOptions = (options.split "option: ")[1..]
-			@robot.logger.info "We have #{pollOptions.length()} options"
+			@robot.logger.info "We have #{pollOptions.length} options"
 			@robot.brain.data.poll[id].topic = topic
 			optionsString = ""
 
