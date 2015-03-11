@@ -34,7 +34,7 @@ module.exports = (robot) ->
 			@robot.logger.info "Poll added topic"
 			optionsString = ""
 
-			@robot.brain.data.poll[id].options = {}
+			@robot.brain.data.poll.options = {}
 			for pollOption in pollOptions
 				index = pollOptions.indexOf(pollOption)
 				@robot.brain.data.poll.options[index] = new Option()
