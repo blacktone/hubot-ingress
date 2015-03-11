@@ -48,9 +48,11 @@ createPoll = (robot, topic, options...) ->
 
 module.exports = (robot) ->
     robot.respond /start poll (.*?)\s(option:\s?.*)+/i, (msg) ->
-        @robot.logger.info "Create poll called"
+        @robot.logger.info "Create poll called: #{msg}"
         topic = msg.match[1]
+        @robot.logger.info "Topic: #{topic}"
         options = msg.match[2]
+        @robot.logger.info "options: #{options}"
         response = createPoll robot, topic, options
         msg.send "@channel: #{response}"
 
