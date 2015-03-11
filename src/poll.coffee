@@ -11,38 +11,15 @@
 #   hubot stop poll [pollId]
 #   hubot vote [pollId] [#option]
 # Author:
-#   logikz   
+#   logikz
+class Option
+	constructor: () ->
+class Poll
+	options
+	constructor: (@id) ->
+		options = {}
 
 module.exports = (robot) ->
-	# generateId = ->
-	# 	text = ""
-	# 	possibleValues = "0123456789abcdef"
-	# 	text += possibleValues.charAt(Math.floor(Math.random() * possibleValues.length)) for [1..5]    
-
-	# parseOptions = (optionsString) ->
-	# 	(optionsString.split "option: ")[1..]
-
-	# createPoll = (topic, options) ->
-	# 	@robot.logger.info "Creating poll with #{topic}"
-	# 	id = generateId()
-	# 	pollOptions = parseOptions options
-	# 	@robot.logger.info "We have #{pollOptions.length()} options"
-	# 	@robot.brain.data.poll[id].topic = topic
-	# 	optionsString = ""
-
-	# 	for pollOption in pollOptions
-	# 		index = pollOptions.indexOf(pollOption)
-	# 		robot.brain.data.poll[id].option[index].text
-	# 		optionsString += "\t#{index}: #{pollOption}\n"
-	# 	@robot.brain.save()
-	# 	@robot.logger.info "Brain saved"
-
-	# 	text =  """
-	# 			POLL ID: #{id}
-	# 			Topic: #{topic}
-	# 			Options:
-	# 			#{optionsString}
-	# 			"""
 	robot.respond /start poll (.*?)\s(option:\s?.*)+/i, (msg) ->
 		try
 			@robot.logger.info "Create poll called: #{msg}"
@@ -59,12 +36,13 @@ module.exports = (robot) ->
 			pollOptions = (options.split "option: ")[1..]
 			@robot.logger.info "We have #{pollOptions.length} options"
 			@robot.brain.data.poll = {}
+			@robot.brain.data.poll[id] = new Poll(id)
 			@robot.brain.data.poll[id].topic = topic
 			optionsString = ""
 
 			for pollOption in pollOptions
 				index = pollOptions.indexOf(pollOption)
-				robot.brain.data.poll[id].option[index].text
+				robot.brain.data.poll[id].options[index].text = pollOption
 				optionsString += "\t#{index}: #{pollOption}\n"
 			@robot.brain.save()
 			@robot.logger.info "Brain saved"
