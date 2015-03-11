@@ -55,7 +55,7 @@ module.exports = (robot) ->
 
 	robot.respond /vote\s+(\d)/i, (msg) ->		
 		vote = msg.match[1]
-		user = msg.user
+		user = @envelope.user
 		@robot.logger.info "Adding a vote for #{vote} for #{user}"
 		#check if the user already voted
 		for option in @robot.brain.data.poll.options
@@ -63,7 +63,7 @@ module.exports = (robot) ->
 			if option.users != undefined
 				@robot.logger.info "Some have voted for this one"
 				option.users = option.users.filter (currentUser) -> currentUser isnt user
-		if @robot.brain.data.poll.options[vote].users != undefined
+		if @robot.brain.data.poll.options[vote].users.length > 0
 			@robot.logger.info "add user to this option since it's defined"
 			@robot.brain.data.poll.options[vote].users.push(user)
 		else
