@@ -50,8 +50,8 @@ module.exports = (robot) ->
 		@robot.logger.info "Topic: #{topic}"
 		options = msg.match[2]
 		@robot.logger.info "options: #{options}"
-		@robot.logger.info @
-		response = @createPoll topic, options
+		@robot.logger.info createPoll
+		response = createPoll topic, options
 		msg.send "@channel: #{response}"
 
 	robot.respond /poll ping/i, (msg) ->
