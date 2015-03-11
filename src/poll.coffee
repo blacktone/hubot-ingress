@@ -60,9 +60,10 @@ module.exports = (robot) ->
 		catch error
 			msg.send error
 			@robot.logger.info error
+
+	robot.respond /vote\s+([a-f\d]{5})\s+(\d)/i, (ms) ->
+		msg.reply "Thanks for your vote"
 		
-
-
 	robot.respond /poll ping/i, (msg) ->
 		@robot.logger.info "ping called"
 		msg.reply "poll pong"
