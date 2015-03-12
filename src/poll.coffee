@@ -55,7 +55,7 @@ module.exports = (robot) ->
 
 	robot.respond /vote\s+(\d)/i, (msg) ->		
 		vote = msg.match[1]
-		user = @envelope.user
+		user = msg.envelope.user
 		@robot.logger.info "Adding a vote for #{vote} for #{user}"
 		#check if the user already voted
 		for option in @robot.brain.data.poll.options
