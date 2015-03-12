@@ -30,7 +30,7 @@ module.exports = (robot) ->
 			pollOptions = (options.split "option: ")[1..]			
 			@robot.brain.data.poll = new Poll()
 			@robot.logger.info "Poll init complete"
-			@robot.brain.data.poll.topic = topic
+			@robot.brain.data.poll.topic = topic			
 			@robot.logger.info "Poll added topic"
 			optionsString = ""
 
@@ -58,26 +58,27 @@ module.exports = (robot) ->
 			vote = msg.match[1]
 			user = msg.envelope.user['name']
 			options = @robot.brain.data.poll.options
-			@robot.logger.info "Adding new vote for #{@robot.brain.data.poll.topic} with #{@robot.brain.data.poll.options.length} options"
-			if vote >= options.length
-				@robot.logger.info "Invalid vote. #{vote} >= #{options.length}"
+			@robot.logger.info "Adding new vote for #{@robot.brain.data.poll.topic} with #{Object.keys(options).length} options"
+			if vote >= Object.keys(options).length
+				@robot.logger.info "Invalid vote. #{vote} >= #{Object.keys(options).length}"
 				msg.reply "Please vote for a valid option"
 				return
 			#check if the user already voted
 			@robot.logger.info "Adding a vote for #{vote} for #{user}"
-			for option in options
-				@robot.logger.info "Checking #{option.text}"
+			for index, option of options
+				@robot.logger.info "Checking #{index}: #{option.text}"
 				if option.users != undefined
 					@robot.logger.info "Some have voted for this one"
 					option.users = option.users.filter (currentUser) -> currentUser isnt user
 			@robot.logger.info "Finishes removing user"
-			if @robot.brain.data.poll.options[vote].users != undefined
+			selectedOption = @robot.brain.data.poll.options[vote]
+			if selectedOption.users != undefined
 				@robot.logger.info "add user to this option since it's defined"
-				@robot.brain.data.poll.options[vote].users.push(user)
+				selectedOption.users.push(user)
 			else
 				@robot.logger.info "First vote, create new array"
-				@robot.brain.data.poll.options[vote].users = []
-				@robot.brain.data.poll.options[vote].users.push(user)
+				selectedOption.users = []
+				selectedOption.users.push(user)
 			@robot.brain.save()
 			@robot.logger.info "Brain saved"
 			msg.reply "Thanks for your vote"
