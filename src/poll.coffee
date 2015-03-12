@@ -88,15 +88,13 @@ module.exports = (robot) ->
 	robot.respond /view results/i, (msg) ->
 		@robot.logger.info "View results"
 		topic = @robot.brain.data.poll.topic		
-		@robot.logger.info "#{@robot.brain.data.poll.options}"	
 		options = @robot.brain.data.poll.options
-		@robot.logger.info "#{options}"	
 		optionString = ""
 		for index, option of options
 			text = option.text
 			numVotes = if option.users == undefined then 0 else option.users.length
 			users = option.users
-			@robot.logger.info "option: #{option} :: text: #{text} :: count: #{numVotes}"
+			@robot.logger.info "option: #{option} :: text: #{text} :: count: #{numVotes} :: users: #{users.join(", ")}"
 			optionString += "\t#{index}: #{text} Total: #{numVotes} Users:(#{users.join(", ")})\n"
 		msg.send """
 		#{topic}
