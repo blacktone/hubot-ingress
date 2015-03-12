@@ -93,10 +93,15 @@ module.exports = (robot) ->
 			optionString = ""
 			for index, option of options
 				text = option.text
-				numVotes = if option.users == undefined then 0 else option.users.length
-				users = option.users
-				@robot.logger.info "option: #{option} :: text: #{text} :: count: #{numVotes} :: users: #{users.join(", ")}"
-				optionString += "\t#{index}: #{text} Total: #{numVotes} Users:(#{users.join(", ")})\n"
+				userString = ""
+				numVotes = 0
+				if option.users != undefined 
+					option.users.length
+					numVotes = option.users.length
+					users = option.users
+					userString = "Users:(#{users.join(", ")})"
+				@robot.logger.info "option: #{option} :: text: #{text} :: count: #{numVotes} :: users: userString"
+				optionString += "\t#{index}: #{text} Total: #{numVotes} #{userString}\n"
 			msg.send """
 			#{topic}
 			Current Poll Results:
