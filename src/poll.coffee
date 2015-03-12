@@ -57,7 +57,8 @@ module.exports = (robot) ->
 		try		
 			vote = msg.match[1]
 			user = msg.envelope.user['name']
-			options = @robot.brain.data.poll.options			
+			options = @robot.brain.data.poll.options
+			@robot.logger.info "Adding new vote for #{@robot.brain.data.poll.topic} with #{@robot.brain.data.poll.options.length} options"
 			if vote >= options.length
 				@robot.logger.info "Invalid vote. #{vote} >= #{options.length}"
 				msg.reply "Please vote for a valid option"
