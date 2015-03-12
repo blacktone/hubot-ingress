@@ -92,8 +92,7 @@ module.exports = (robot) ->
 		options = @robot.brain.data.poll.options
 		@robot.logger.info "#{options}"	
 		optionString = ""
-		for option in options
-			index = options.indexOf(option)
+		for index, option of options
 			text = option.text
 			numVotes = if option.users == undefined then 0 else option.users.length
 			users = option.users
