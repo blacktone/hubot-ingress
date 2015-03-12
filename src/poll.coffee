@@ -51,7 +51,7 @@ module.exports = (robot) ->
 			msg.send "@channel: #{text}"
 		catch error
 			msg.send error
-			@robot.logger.info error
+			@robot.logger.error error
 
 	robot.respond /vote\s+(\d)/i, (msg) ->
 		try		
@@ -83,25 +83,27 @@ module.exports = (robot) ->
 			@robot.logger.info "Brain saved"
 			msg.reply "Thanks for your vote"
 		catch error
-			@robot.logger.info error
+			@robot.logger.error error
 
 	robot.respond /view results/i, (msg) ->
-		@robot.logger.info "View results"
-		topic = @robot.brain.data.poll.topic		
-		options = @robot.brain.data.poll.options
-		optionString = ""
-		for index, option of options
-			text = option.text
-			numVotes = if option.users == undefined then 0 else option.users.length
-			users = option.users
-			@robot.logger.info "option: #{option} :: text: #{text} :: count: #{numVotes} :: users: #{users.join(", ")}"
-			optionString += "\t#{index}: #{text} Total: #{numVotes} Users:(#{users.join(", ")})\n"
-		msg.send """
-		#{topic}
-		Current Poll Results:
-		#{optionString}
-		"""
-
+		try
+			@robot.logger.info "View results"
+			topic = @robot.brain.data.poll.topic		
+			options = @robot.brain.data.poll.options
+			optionString = ""
+			for index, option of options
+				text = option.text
+				numVotes = if option.users == undefined then 0 else option.users.length
+				users = option.users
+				@robot.logger.info "option: #{option} :: text: #{text} :: count: #{numVotes} :: users: #{users.join(", ")}"
+				optionString += "\t#{index}: #{text} Total: #{numVotes} Users:(#{users.join(", ")})\n"
+			msg.send """
+			#{topic}
+			Current Poll Results:
+			#{optionString}
+			"""
+		catch error
+			@robot.logger.error error
 	robot.respond /poll ping/i, (msg) ->
 		@robot.logger.info "ping called"
 		msg.reply "poll pong"
