@@ -8,8 +8,7 @@
 #
 # Commands:
 #   hubot start poll [topic] {option:[option]}
-#   hubot stop poll [pollId]
-#   hubot vote [pollId] [#option]
+#   hubot vote [#option]
 # Author:
 #   logikz
 class Option
@@ -24,21 +23,22 @@ module.exports = (robot) ->
 			topic = msg.match[1]
 			#@robot.logger.info "Topic: #{topic}"
 			options = msg.match[2]
+			room = msg.message.room
 			#@robot.logger.info "options: #{options}"			
 			@robot.logger.info "Creating poll with #{topic}"			
 			
-			pollOptions = (options.split "option: ")[1..]			
-			@robot.brain.data.poll = new Poll()
+			pollOptions = (options.split "option: ")[1..]
+			@robot.brain.data.poll[room] = new Poll()
 			@robot.logger.info "Poll init complete"
-			@robot.brain.data.poll.topic = topic			
+			@robot.brain.data.poll[room].topic = topic			
 			@robot.logger.info "Poll added topic"
 			optionsString = ""
 
-			@robot.brain.data.poll.options = {}
+			@robot.brain.data.poll[room].options = {}
 			for pollOption in pollOptions
 				index = pollOptions.indexOf(pollOption)
-				@robot.brain.data.poll.options[index] = new Option()
-				@robot.brain.data.poll.options[index].text = pollOption
+				@robot.brain.data.poll[room].options[index] = new Option()
+				@robot.brain.data.poll[room].options[index].text = pollOption
 				optionsString += "\t#{index}: #{pollOption}\n"
 			@robot.brain.save()
 			@robot.logger.info "Brain saved"
@@ -48,7 +48,7 @@ module.exports = (robot) ->
 					Options:
 					#{optionsString}
 					"""
-			msg.send "@channel: #{text}"
+			msg.send "#{text}"
 		catch error
 			msg.send error
 			@robot.logger.error error
@@ -57,8 +57,9 @@ module.exports = (robot) ->
 		try		
 			vote = msg.match[1]
 			user = msg.envelope.user['name']
-			options = @robot.brain.data.poll.options
-			@robot.logger.info "Adding new vote for #{@robot.brain.data.poll.topic} with #{Object.keys(options).length} options"
+			room = msg.message.room
+			options = @robot.brain.data.poll[room].options
+			@robot.logger.info "Adding new vote for #{@robot.brain.data.poll[room].topic} with #{Object.keys(options).length} options"
 			if vote >= Object.keys(options).length
 				@robot.logger.info "Invalid vote. #{vote} >= #{Object.keys(options).length}"
 				msg.reply "Please vote for a valid option"
@@ -71,7 +72,7 @@ module.exports = (robot) ->
 					@robot.logger.info "Some have voted for this one"
 					option.users = option.users.filter (currentUser) -> currentUser isnt user
 			@robot.logger.info "Finishes removing user"
-			selectedOption = @robot.brain.data.poll.options[vote]
+			selectedOption = @robot.brain.data.poll[room].options[vote]
 			if selectedOption.users != undefined
 				@robot.logger.info "add user to this option since it's defined"
 				selectedOption.users.push(user)
@@ -85,11 +86,12 @@ module.exports = (robot) ->
 		catch error
 			@robot.logger.error error
 
-	robot.respond /view results/i, (msg) ->
+	robot.respond /(view|show|poll) result(s)?/i, (msg) ->
 		try
 			@robot.logger.info "View results"
-			topic = @robot.brain.data.poll.topic		
-			options = @robot.brain.data.poll.options
+			room = msg.message.room
+			topic = @robot.brain.data.poll[room].topic		
+			options = @robot.brain.data.poll[room].options
 			optionString = ""
 			for index, option of options
 				text = option.text
@@ -109,8 +111,5 @@ module.exports = (robot) ->
 			"""
 		catch error
 			@robot.logger.error error
-	robot.respond /poll ping/i, (msg) ->
-		@robot.logger.info "ping called"
-		msg.reply "poll pong"
 
 
