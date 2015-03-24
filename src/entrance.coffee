@@ -13,7 +13,7 @@
 module.exports = (robot) ->
 	robot.enter (msg)->
 		room = msg.message.room
-		if(room == "general")
+		if(room == "trello")
 			msg.reply("test")
 
 
