@@ -22,7 +22,5 @@ If you need any help, feel free to message Logikz
 module.exports = (robot) ->
 	robot.enter (msg)->
 		room = msg.message.room
-		if(room == "trello")
+		if(room == "general" or room == "tests")
 			msg.reply(welcomeMessage)
-
-
