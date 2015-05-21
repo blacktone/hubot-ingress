@@ -14,9 +14,9 @@ welcomeMessage = '''
 Welcome to Slack! :allthethings:  
 Please enjoy the use of our ingress bot - Jarvis.  You can type ```jarvis help``` for command usage.  
 Please only use jarvis in general or in private message directly to Jarvis.  He can be quite the talker :). 
-Feel free to make public and private chat rooms to discuss various topics.  
+Feel free to make public and private chat rooms to discuss various topics.  If you want help inserting your badges please see: http://enlightened.la/badges/
 
-If you need any help, feel free to message Logikz
+If you need any help, feel free to message Logikz.
 '''
 
 module.exports = (robot) ->
