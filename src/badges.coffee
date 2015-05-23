@@ -76,7 +76,7 @@ badgeTypes = {
   'missionday': 1,
   'nl1331' : 1,
   'oliver-lynton-wolfe': 1,
-  'perseopolis': 1,
+  'persepolis': 1,
   'pioneer': 5,
   'purifier': 5,
   'recharger': 5,
