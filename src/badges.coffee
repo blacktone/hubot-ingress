@@ -73,6 +73,7 @@ badgeTypes = {
   'interitus': 1,
   'liberator': 5,
   'mindcontroller': 5,
+  'missionday': 1,
   'nl1331' : 1,
   'oliver-lynton-wolfe': 1,
   'perseopolis': 1,
